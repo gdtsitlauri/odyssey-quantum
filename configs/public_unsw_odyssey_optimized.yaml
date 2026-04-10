@@ -1,0 +1,11 @@
+experiment_name: public_unsw_odyssey_optimized
+inherits: configs/public_unsw_odyssey.yaml
+model:
+  encoder_hidden_dim: 64
+  encoder_latent_dim: 24
+training:
+  epochs: 6
+  patience: 3
+features:
+  disable_fragility: true
+

@@ -1,0 +1,5 @@
+experiment_name: ablation_no_fragility
+inherits: configs/base.yaml
+features:
+  disable_fragility: true
+

@@ -1,0 +1,5 @@
+experiment_name: ablation_no_temporal
+inherits: configs/base.yaml
+training:
+  lambda_temp: 0.0
+

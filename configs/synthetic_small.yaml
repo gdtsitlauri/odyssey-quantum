@@ -1,0 +1,15 @@
+experiment_name: synthetic_small_debug
+inherits: configs/base.yaml
+seed: 7
+seeds: [7]
+data:
+  synthetic:
+    n_samples: 900
+    n_sequences: 150
+    window_size: 4
+training:
+  epochs: 8
+  patience: 3
+search:
+  enabled: false
+

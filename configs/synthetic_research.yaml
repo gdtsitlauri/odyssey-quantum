@@ -1,0 +1,16 @@
+experiment_name: synthetic_research_main
+inherits: configs/base.yaml
+seed: 11
+seeds: [11, 19, 29]
+data:
+  synthetic:
+    n_samples: 3600
+    n_sequences: 600
+    window_size: 6
+training:
+  epochs: 20
+  patience: 5
+search:
+  enabled: true
+  max_trials: 8
+

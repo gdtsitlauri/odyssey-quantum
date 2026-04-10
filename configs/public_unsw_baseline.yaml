@@ -1,0 +1,22 @@
+experiment_name: public_unsw_baseline
+inherits: configs/base.yaml
+seed: 13
+seeds: [13]
+data:
+  source: unsw_nb15
+  sequence_mode: false
+  time_aware_split: true
+  public:
+    dataset: unsw_nb15
+    root: data/raw/unsw_nb15
+    max_rows: 1000
+baseline_models:
+  - logistic_regression
+  - random_forest
+  - mlp
+  - mlp_calibrated
+training:
+  epochs: 3
+  batch_size: 128
+search:
+  enabled: false

@@ -1,0 +1,18 @@
+experiment_name: ablation_suite
+inherits: configs/base.yaml
+data:
+  synthetic:
+    n_samples: 900
+    n_sequences: 150
+    window_size: 4
+training:
+  epochs: 6
+  patience: 2
+search:
+  enabled: false
+ablations:
+  - full
+  - no_quantum
+  - no_fragility
+  - no_temporal
+  - random_uncertainty

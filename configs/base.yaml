@@ -1,0 +1,88 @@
+experiment_name: base_experiment
+output_dir: outputs
+device: auto
+seed: 7
+seeds:
+  - 7
+data:
+  source: synthetic
+  sequence_mode: false
+  time_aware_split: false
+  val_size: 0.15
+  test_size: 0.2
+  synthetic:
+    n_samples: 2400
+    window_size: 6
+    n_sequences: 400
+    attack_rate: 0.28
+    stealth_fraction: 0.22
+    noisy_fraction: 0.18
+    fragility_fraction: 0.25
+    random_state: 7
+    persist_generated: false
+  public:
+    dataset: unsw_nb15
+    root: data/raw/unsw_nb15
+model:
+  name: odyssey_risk
+  require_quantum: false
+  encoder_hidden_dim: 64
+  encoder_latent_dim: 24
+  dropout: 0.15
+  quantum_enabled: true
+  quantum_fallback: classical
+  quantum:
+    n_qubits: 4
+    n_layers: 2
+    backend: default.qubit
+    shots: null
+  combiner_init:
+    alpha: 1.0
+    beta: 0.55
+    gamma: 0.75
+    delta: 0.4
+training:
+  epochs: 18
+  batch_size: 64
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  patience: 4
+  linear_probe_warm_start: true
+  focal_gamma: 2.0
+  positive_class_weight: 1.4
+  lambda_attack: 0.35
+  lambda_brier: 0.25
+  lambda_temp: 0.15
+  lambda_margin: 0.2
+  minority_margin: 0.08
+  gradient_clip_norm: 5.0
+  posthoc_blend:
+    enabled: true
+    risk_weights: [0.0, 0.15, 0.3, 0.5, 0.7, 1.0]
+    temperatures: [0.85, 1.0, 1.15, 1.3]
+evaluation:
+  threshold: 0.5
+  fixed_fpr_target: 0.05
+  ece_bins: 10
+reporting:
+  make_figures: true
+  export_tables: true
+  save_predictions: true
+  include_pdf: true
+search:
+  enabled: true
+  max_trials: 6
+  learning_rates: [0.001, 0.0005]
+  hidden_dims: [64]
+  latent_dims: [16, 24]
+  beta_values: [0.4, 0.55]
+  gamma_values: [0.75]
+  delta_values: [0.4]
+  alpha_values: [1.0]
+  dropout_values: [0.15]
+  weight_decays: [0.0001]
+  lambda_attack_values: [0.35]
+  disable_fragility_values: [false]
+  quantum_enabled_values: [true]
+  uncertainty_modes: ["auto"]
+

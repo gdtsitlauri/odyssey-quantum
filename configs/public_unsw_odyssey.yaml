@@ -1,0 +1,29 @@
+experiment_name: public_unsw_odyssey
+inherits: configs/base.yaml
+seed: 13
+seeds: [13]
+data:
+  source: unsw_nb15
+  sequence_mode: false
+  time_aware_split: true
+  public:
+    dataset: unsw_nb15
+    root: data/raw/unsw_nb15
+    max_rows: 1000
+model:
+  name: odyssey_risk
+  require_quantum: false
+  encoder_hidden_dim: 48
+  encoder_latent_dim: 16
+  combiner_init:
+    alpha: 1.25
+    beta: 0.2
+    gamma: 0.1
+    delta: 0.15
+training:
+  epochs: 3
+  batch_size: 64
+  patience: 2
+search:
+  enabled: false
+

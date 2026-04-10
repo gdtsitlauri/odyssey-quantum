@@ -1,0 +1,5 @@
+# synthetic_quantum_smoke_summary
+
+| model_name | accuracy_mean | accuracy_std | precision_mean | precision_std | recall_mean | recall_std | f1_mean | f1_std | balanced_accuracy_mean | balanced_accuracy_std | brier_score_mean | brier_score_std | ece_mean | ece_std | recall_at_fixed_fpr_mean | recall_at_fixed_fpr_std | latency_ms_per_sample_mean | latency_ms_per_sample_std | parameter_count_mean | parameter_count_std | training_time_s_mean | training_time_s_std | tn_mean | tn_std | fp_mean | fp_std | fn_mean | fn_std | tp_mean | tp_std | roc_auc_mean | roc_auc_std | pr_auc_mean | pr_auc_std |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| odyssey_risk | 0.875 | nan | 0.8 | nan | 1.0 | nan | 0.8888888888888888 | nan | 0.875 | nan | 0.0858834682532763 | nan | 0.2442157641053199 | nan | 1.0 | nan | 84.61640000007264 | nan | 8420.0 | nan | 53.1889441000003 | nan | 3.0 | nan | 1.0 | nan | 0.0 | nan | 4.0 | nan | 1.0 | nan | 1.0 | nan |

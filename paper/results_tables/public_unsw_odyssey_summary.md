@@ -1,0 +1,5 @@
+# public_unsw_odyssey_summary
+
+| model_name | accuracy_mean | accuracy_std | precision_mean | precision_std | recall_mean | recall_std | f1_mean | f1_std | balanced_accuracy_mean | balanced_accuracy_std | brier_score_mean | brier_score_std | ece_mean | ece_std | recall_at_fixed_fpr_mean | recall_at_fixed_fpr_std | latency_ms_per_sample_mean | latency_ms_per_sample_std | parameter_count_mean | parameter_count_std | training_time_s_mean | training_time_s_std | tn_mean | tn_std | fp_mean | fp_std | fn_mean | fn_std | tp_mean | tp_std | roc_auc_mean | roc_auc_std | pr_auc_mean | pr_auc_std |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| odyssey_risk | 0.88 | nan | 0.90625 | nan | 0.90625 | nan | 0.90625 | nan | 0.8697916666666667 | nan | 0.0755556252153626 | nan | 0.0620363592707871 | nan | 0.8125 | nan | 8.382647500000076 | nan | 8957.0 | nan | 57.21503699999994 | nan | 60.0 | nan | 12.0 | nan | 12.0 | nan | 116.0 | nan | 0.9618055555555556 | nan | 0.9786488291316496 | nan |

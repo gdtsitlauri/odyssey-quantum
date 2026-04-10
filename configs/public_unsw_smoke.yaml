@@ -1,0 +1,22 @@
+experiment_name: public_unsw_smoke
+inherits: configs/base.yaml
+seed: 13
+seeds: [13]
+data:
+  source: unsw_nb15
+  sequence_mode: false
+  time_aware_split: true
+  public:
+    dataset: unsw_nb15
+    root: data/raw/unsw_nb15
+    max_rows: 12000
+model:
+  name: odyssey_risk
+  quantum_enabled: false
+training:
+  epochs: 4
+  batch_size: 128
+  patience: 2
+search:
+  enabled: false
+

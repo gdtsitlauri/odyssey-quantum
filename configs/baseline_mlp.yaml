@@ -1,0 +1,6 @@
+experiment_name: baseline_mlp
+inherits: configs/base.yaml
+model:
+  name: mlp
+  quantum_enabled: false
+

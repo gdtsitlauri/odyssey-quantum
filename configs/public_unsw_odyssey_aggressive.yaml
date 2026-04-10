@@ -1,0 +1,40 @@
+experiment_name: public_unsw_odyssey_aggressive
+inherits: configs/public_unsw_odyssey.yaml
+model:
+  encoder_hidden_dim: 64
+  encoder_latent_dim: 24
+  dropout: 0.1
+  combiner_init:
+    alpha: 1.5
+    beta: 0.15
+    gamma: 0.05
+    delta: 0.1
+training:
+  epochs: 8
+  batch_size: 64
+  patience: 4
+  learning_rate: 0.0005
+  weight_decay: 0.00005
+  lambda_attack: 0.5
+  posthoc_blend:
+    enabled: true
+    risk_weights: [0.0, 0.1, 0.2, 0.35, 0.5, 0.7, 1.0]
+    temperatures: [0.8, 0.9, 1.0, 1.1, 1.25]
+features:
+  disable_fragility: true
+search:
+  enabled: true
+  max_trials: 8
+  learning_rates: [0.0005]
+  hidden_dims: [64]
+  latent_dims: [24]
+  alpha_values: [1.25, 1.5]
+  beta_values: [0.05, 0.15]
+  gamma_values: [0.0]
+  delta_values: [0.05, 0.1]
+  dropout_values: [0.05, 0.1, 0.15]
+  weight_decays: [0.00005]
+  lambda_attack_values: [0.35, 0.5]
+  disable_fragility_values: [true]
+  quantum_enabled_values: [true, false]
+  uncertainty_modes: ["auto", "zero"]

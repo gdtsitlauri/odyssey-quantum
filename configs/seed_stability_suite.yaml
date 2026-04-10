@@ -1,0 +1,13 @@
+experiment_name: seed_stability_suite
+inherits: configs/base.yaml
+seeds: [7, 11, 19, 29, 37]
+data:
+  synthetic:
+    n_samples: 700
+    n_sequences: 140
+    window_size: 4
+training:
+  epochs: 5
+  patience: 2
+search:
+  enabled: false

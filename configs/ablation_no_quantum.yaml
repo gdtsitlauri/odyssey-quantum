@@ -1,0 +1,5 @@
+experiment_name: ablation_no_quantum
+inherits: configs/base.yaml
+model:
+  quantum_enabled: false
+

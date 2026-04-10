@@ -1,0 +1,18 @@
+experiment_name: synthetic_quantum_smoke
+inherits: configs/base.yaml
+seed: 5
+seeds: [5]
+data:
+  synthetic:
+    n_samples: 32
+    n_sequences: 8
+    window_size: 4
+training:
+  epochs: 1
+  batch_size: 4
+  patience: 1
+search:
+  enabled: false
+model:
+  quantum:
+    backend: auto

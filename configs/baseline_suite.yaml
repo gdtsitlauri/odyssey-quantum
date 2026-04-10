@@ -1,0 +1,13 @@
+experiment_name: baseline_suite
+inherits: configs/base.yaml
+baseline_models:
+  - logistic_regression
+  - random_forest
+  - mlp
+  - mlp_calibrated
+  - gru
+training:
+  epochs: 12
+search:
+  enabled: false
+

@@ -1,0 +1,9 @@
+# seed_stability_suite_metrics
+
+| model_name | seed | accuracy | precision | recall | f1 | balanced_accuracy | brier_score | ece | recall_at_fixed_fpr | latency_ms_per_sample | parameter_count | training_time_s | tn | fp | fn | tp | roc_auc | pr_auc | notes | uncertainty_mode | backend_used |
+| --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+| odyssey_risk | 7 | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 | 0.0006607410077573 | 0.0072259342970499 | 1.0 | 8.212851785710232 | 8940.0 | 32.245812500000284 | 84.0 | 0.0 | 0.0 | 28.0 | 1.0 | 1.0 | blend_weight_risk=0.00,temperature=0.85,val_pr_auc=1.0000 | quantum | default.qubit |
+| odyssey_risk | 11 | 0.9910714285714286 | 0.972972972972973 | 1.0 | 0.9863013698630136 | 0.993421052631579 | 0.0033079239346536 | 0.0091413612445023 | 1.0 | 8.458400892850802 | 8940.0 | 32.203949400000056 | 75.0 | 1.0 | 0.0 | 36.0 | 1.0 | 1.0 | blend_weight_risk=0.00,temperature=0.85,val_pr_auc=1.0000 | quantum | default.qubit |
+| odyssey_risk | 19 | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 | 0.0011789323478972 | 0.0068862461591428 | 1.0 | 8.169931250003108 | 8940.0 | 32.30404220000037 | 88.0 | 0.0 | 0.0 | 24.0 | 1.0 | 1.0 | blend_weight_risk=0.00,temperature=0.85,val_pr_auc=1.0000 | quantum | default.qubit |
+| odyssey_risk | 29 | 0.9910714285714286 | 1.0 | 0.9722222222222222 | 0.9859154929577464 | 0.9861111111111112 | 0.0064112264991423 | 0.0106054561833356 | 1.0 | 8.855307142864278 | 8940.0 | 32.29306100000031 | 76.0 | 0.0 | 1.0 | 35.0 | 0.9996345029239766 | 0.9992492492492492 | blend_weight_risk=0.30,temperature=0.85,val_pr_auc=1.0000 | quantum | default.qubit |
+| odyssey_risk | 37 | 1.0 | 1.0 | 1.0 | 1.0 | 1.0 | 0.0002306756486513 | 0.0036558097579748 | 1.0 | 8.32296071428118 | 8940.0 | 32.24946479999926 | 80.0 | 0.0 | 0.0 | 32.0 | 1.0 | 1.0 | blend_weight_risk=0.00,temperature=0.85,val_pr_auc=1.0000 | quantum | default.qubit |

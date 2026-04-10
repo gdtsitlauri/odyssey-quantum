@@ -1,0 +1,4 @@
+experiment_name: public_unsw_odyssey_ensemble
+inherits: configs/public_unsw_odyssey_aggressive.yaml
+baseline_models:
+  - odyssey_stacked_ensemble
