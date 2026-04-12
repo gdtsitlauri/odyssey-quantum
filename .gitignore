@@ -35,3 +35,4 @@ site/
 pip-wheel-metadata/
 *.whl
 *.log
+.claude/
