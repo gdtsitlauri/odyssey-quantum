@@ -1,0 +1,54 @@
+# Hard synthetic ablation: designed to expose quantum head contribution.
+# Uses a smaller latent_dim (4 = n_qubits) so the VQC directly processes
+# the full latent representation, maximising circuit expressiveness.
+# High stealth_fraction and fragility_fraction create ambiguous class
+# boundaries where uncertainty estimation genuinely matters for calibration.
+experiment_name: synthetic_hard_ablation
+inherits: configs/base.yaml
+seed: 11
+seeds: [11, 19, 29]
+data:
+  source: synthetic
+  synthetic:
+    n_samples: 1800
+    n_sequences: 300
+    window_size: 6
+    attack_rate: 0.38
+    stealth_fraction: 0.65   # most attacks are stealthy – hard boundary
+    noisy_fraction: 0.20
+    fragility_fraction: 0.45  # heavy fragility overlap with benign
+model:
+  encoder_hidden_dim: 32
+  encoder_latent_dim: 4      # matches n_qubits exactly for best VQC fit
+  dropout: 0.20
+  quantum:
+    n_qubits: 4
+    n_layers: 3              # extra expressiveness
+    backend: default.qubit
+  combiner_init:
+    alpha: 1.0
+    beta: 0.55               # higher quantum weight
+    gamma: 0.55
+    delta: 0.35
+features:
+  disable_fragility: false   # fragility enabled (relevant for hard scenario)
+training:
+  epochs: 16
+  batch_size: 32
+  patience: 4
+  learning_rate: 0.001
+  weight_decay: 0.0001
+  lambda_attack: 0.40
+  lambda_brier: 0.25
+  lambda_temp: 0.15
+  lambda_margin: 0.20
+  posthoc_blend:
+    enabled: true
+    risk_weights: [0.0, 0.25, 0.5, 0.75, 1.0]
+    temperatures: [0.8, 0.9, 1.0, 1.1, 1.25]
+search:
+  enabled: false
+ablations:
+  - full
+  - no_quantum
+  - no_fragility

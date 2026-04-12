@@ -1,0 +1,4 @@
+model_name,seed,accuracy,precision,recall,f1,balanced_accuracy,brier_score,ece,recall_at_fixed_fpr,latency_ms_per_sample,parameter_count,training_time_s,tn,fp,fn,tp,roc_auc,pr_auc,notes,uncertainty_mode,backend_used
+odyssey_risk,11,1.0,1.0,1.0,1.0,1.0,0.0002477514055219642,0.003210530572202199,1.0,8.406160277778932,8052.0,467.58769740000025,528.0,0.0,0.0,192.0,1.0,0.9999999999999999,"blend_weight_risk=1.00,temperature=0.85,val_pr_auc=1.0000",quantum,default.qubit
+odyssey_risk,19,1.0,1.0,1.0,1.0,1.0,0.000583635509824994,0.005780343441438168,1.0,10.317305694444359,8052.0,404.10020639999857,528.0,0.0,0.0,192.0,1.0,0.9999999999999999,"blend_weight_risk=1.00,temperature=0.85,val_pr_auc=1.0000",quantum,default.qubit
+odyssey_risk,29,1.0,1.0,1.0,1.0,1.0,0.00015396844589222374,0.0015865122417987238,1.0,7.848990416667019,8052.0,602.4422204999992,528.0,0.0,0.0,192.0,0.9999999999999999,1.0,"blend_weight_risk=1.00,temperature=0.85,val_pr_auc=1.0000",quantum,default.qubit
