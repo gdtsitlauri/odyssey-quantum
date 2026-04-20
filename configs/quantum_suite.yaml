@@ -1,0 +1,24 @@
+experiment_name: quantum_suite
+output_dir: results/quantum_suite
+
+quantum:
+  foundations:
+    ghz_qubits: 3
+    noise_levels: [0.0, 0.05, 0.1, 0.2, 0.35]
+  algorithms:
+    deutsch_jozsa:
+      n_input_qubits: 2
+    bernstein_vazirani:
+      hidden_string: "101"
+    grover:
+      n_qubits: 3
+      marked_bitstring: "101"
+    vqe:
+      initial_params: [0.2, -0.3, 0.1, 0.05, 0.0, 0.0]
+      maxiter: 80
+    qaoa:
+      gamma_steps: 21
+      beta_steps: 21
+    shor:
+      composite: 15
+      base: 2

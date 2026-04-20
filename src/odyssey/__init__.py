@@ -5,6 +5,7 @@ from odyssey.data.dataset_base import DatasetBundle, ProcessedDataset
 from odyssey.data.public_adapter import load_dataset
 from odyssey.evaluation.reporting import export_report
 from odyssey.models.odyssey_risk import build_model
+from odyssey.quantum.workflows import run_quantum_suite_workflow
 from odyssey.training.trainer import train_model
 from odyssey.evaluation.metrics import evaluate_model
 
@@ -16,6 +17,7 @@ __all__ = [
     "export_report",
     "load_config",
     "load_dataset",
+    "run_quantum_suite_workflow",
     "train_model",
 ]
 

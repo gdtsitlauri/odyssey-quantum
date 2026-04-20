@@ -1,0 +1,4 @@
+experiment,top_state,top_probability,support_size,entropy_bits
+single_qubit_superposition,0,0.5,2,1.0
+bell_state,00,0.5,2,1.0
+ghz_3q,000,0.5,2,1.0

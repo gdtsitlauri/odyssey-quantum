@@ -1,0 +1,17 @@
+experiment_name: synthetic_quantum_winner_research
+inherits: configs/synthetic_hard_ablation.yaml
+output_dir: outputs/quantum_winner_research
+seed: 11
+seeds: [11, 19, 29]
+data:
+  exclude_feature_columns: [uncertainty_hint]
+  synthetic:
+    n_samples: 480
+    n_sequences: 80
+    window_size: 6
+training:
+  epochs: 5
+  patience: 2
+  batch_size: 32
+search:
+  enabled: false

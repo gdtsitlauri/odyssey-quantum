@@ -10,9 +10,9 @@ model:
     gamma: 0.05
     delta: 0.1
 training:
-  epochs: 8
-  batch_size: 64
-  patience: 4
+  epochs: 6
+  batch_size: 128
+  patience: 3
   learning_rate: 0.0005
   weight_decay: 0.00005
   lambda_attack: 0.5
@@ -20,10 +20,19 @@ training:
     enabled: true
     risk_weights: [0.0, 0.1, 0.2, 0.35, 0.5, 0.7, 1.0]
     temperatures: [0.8, 0.9, 1.0, 1.1, 1.25]
+  teacher_ensemble:
+    enabled: true
+    members: [logistic_regression, random_forest]
+    components: [random_forest_prob, risk_prob, attack_prob, logistic_regression_prob]
+    component_weight_grid:
+      random_forest_prob: [0.0, 0.4, 0.7, 1.0]
+      risk_prob: [0.0, 0.1, 0.2]
+      attack_prob: [0.0, 0.1]
+      logistic_regression_prob: [0.0, 0.05]
 features:
   disable_fragility: true
 search:
-  enabled: true
+  enabled: false
   max_trials: 8
   learning_rates: [0.0005]
   hidden_dims: [64]

@@ -15,6 +15,11 @@ from odyssey.experiments.registry import (
     run_baseline_suite,
     run_odyssey_experiment,
 )
+from odyssey.quantum.workflows import (
+    run_quantum_algorithms_workflow,
+    run_quantum_foundations_workflow,
+    run_quantum_suite_workflow,
+)
 
 
 def build_parser() -> argparse.ArgumentParser:
@@ -42,6 +47,24 @@ def build_parser() -> argparse.ArgumentParser:
 
     paper = subparsers.add_parser("export-paper-assets", help="Export tables and figure manifests for paper support")
     paper.add_argument("--source", default="outputs")
+
+    quantum_foundations = subparsers.add_parser(
+        "quantum-foundations",
+        help="Run Odyssey's deterministic quantum foundations track",
+    )
+    quantum_foundations.add_argument("--config", default="configs/quantum_foundations.yaml")
+
+    quantum_algorithms = subparsers.add_parser(
+        "quantum-algorithms",
+        help="Run Odyssey's educational quantum algorithm suite",
+    )
+    quantum_algorithms.add_argument("--config", default="configs/quantum_algorithms.yaml")
+
+    quantum_suite = subparsers.add_parser(
+        "quantum-suite",
+        help="Run the full Odyssey quantum track (foundations + algorithms)",
+    )
+    quantum_suite.add_argument("--config", default="configs/quantum_suite.yaml")
     return parser
 
 
@@ -63,4 +86,14 @@ def main(argv: Sequence[str] | None = None) -> None:
         print(make_figures(Path(args.report)))
     elif args.command == "export-paper-assets":
         print(export_paper_assets(Path(args.source)))
+    elif args.command == "quantum-foundations":
+        print(run_quantum_foundations_workflow(args.config))
+    elif args.command == "quantum-algorithms":
+        print(run_quantum_algorithms_workflow(args.config))
+    elif args.command == "quantum-suite":
+        print(run_quantum_suite_workflow(args.config))
+
+
+if __name__ == "__main__":
+    main()
 

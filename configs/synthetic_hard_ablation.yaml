@@ -9,6 +9,7 @@ seed: 11
 seeds: [11, 19, 29]
 data:
   source: synthetic
+  exclude_feature_columns: [uncertainty_hint]
   synthetic:
     n_samples: 1800
     n_sequences: 300
@@ -33,7 +34,7 @@ model:
 features:
   disable_fragility: false   # fragility enabled (relevant for hard scenario)
 training:
-  epochs: 16
+  epochs: 14
   batch_size: 32
   patience: 4
   learning_rate: 0.001
@@ -42,10 +43,15 @@ training:
   lambda_brier: 0.25
   lambda_temp: 0.15
   lambda_margin: 0.20
+  lambda_uncertainty: 0.15
+  lambda_uncertainty_corr: 0.05
+  uncertainty_target_column: uncertainty_hint
   posthoc_blend:
     enabled: true
-    risk_weights: [0.0, 0.25, 0.5, 0.75, 1.0]
-    temperatures: [0.8, 0.9, 1.0, 1.1, 1.25]
+    risk_weights: [0.0, 0.2, 0.4, 0.6, 0.8, 1.0]
+    temperatures: [0.75, 0.8, 0.9, 1.0, 1.1]
+    uncertainty_gains: [0.0]
+    uncertainty_temperature_gains: [0.0, 0.25, 0.5, 0.75, 1.0]
 search:
   enabled: false
 ablations:

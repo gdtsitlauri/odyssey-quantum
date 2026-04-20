@@ -63,11 +63,33 @@ def minority_attack_margin_term(
     return torch.relu(torch.tensor(margin, device=probs.device) - (attack_mean - benign_mean))
 
 
+def uncertainty_alignment_loss(scores: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    mask = torch.isfinite(targets)
+    if int(mask.sum()) == 0:
+        return torch.zeros((), device=scores.device)
+    return F.smooth_l1_loss(scores[mask], targets[mask])
+
+
+def uncertainty_correlation_penalty(scores: torch.Tensor, targets: torch.Tensor) -> torch.Tensor:
+    mask = torch.isfinite(targets)
+    if int(mask.sum()) < 2:
+        return torch.zeros((), device=scores.device)
+    centered_scores = scores[mask] - scores[mask].mean()
+    centered_targets = targets[mask] - targets[mask].mean()
+    score_norm = torch.linalg.vector_norm(centered_scores)
+    target_norm = torch.linalg.vector_norm(centered_targets)
+    if float(score_norm.detach().cpu()) < 1e-6 or float(target_norm.detach().cpu()) < 1e-6:
+        return torch.zeros((), device=scores.device)
+    correlation = torch.dot(centered_scores, centered_targets) / (score_norm * target_norm)
+    return 1.0 - correlation.clamp(-1.0, 1.0)
+
+
 def composite_odyssey_loss(
     outputs: dict[str, torch.Tensor],
     targets: torch.Tensor,
     sequence_ids: torch.Tensor,
     timestamps: torch.Tensor,
+    uncertainty_targets: torch.Tensor | None,
     training_cfg: dict,
 ) -> tuple[torch.Tensor, dict[str, float]]:
     risk_probs = outputs["risk_prob"]
@@ -88,12 +110,18 @@ def composite_odyssey_loss(
         targets,
         margin=float(training_cfg.get("minority_margin", 0.08)),
     )
+    if uncertainty_targets is None:
+        uncertainty_targets = torch.full_like(risk_probs, float("nan"))
+    uncertainty_alignment = uncertainty_alignment_loss(outputs["uncertainty_score"], uncertainty_targets)
+    uncertainty_corr = uncertainty_correlation_penalty(outputs["uncertainty_score"], uncertainty_targets)
     total = (
         focal
         + float(training_cfg.get("lambda_attack", 0.0)) * attack_aux
         + float(training_cfg.get("lambda_brier", 0.0)) * brier
         + float(training_cfg.get("lambda_temp", 0.0)) * temporal
         + float(training_cfg.get("lambda_margin", 0.0)) * margin
+        + float(training_cfg.get("lambda_uncertainty", 0.0)) * uncertainty_alignment
+        + float(training_cfg.get("lambda_uncertainty_corr", 0.0)) * uncertainty_corr
     )
     return total, {
         "attack_aux": float(attack_aux.detach().cpu()),
@@ -101,5 +129,7 @@ def composite_odyssey_loss(
         "brier": float(brier.detach().cpu()),
         "temporal": float(temporal.detach().cpu()),
         "margin": float(margin.detach().cpu()),
+        "uncertainty_alignment": float(uncertainty_alignment.detach().cpu()),
+        "uncertainty_corr": float(uncertainty_corr.detach().cpu()),
     }
 

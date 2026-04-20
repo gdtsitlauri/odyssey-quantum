@@ -1,0 +1,4 @@
+inherits: quantum_suite.yaml
+
+experiment_name: quantum_algorithms
+output_dir: results/quantum_suite

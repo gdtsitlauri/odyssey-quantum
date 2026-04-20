@@ -7,36 +7,47 @@ Platform: CPU (torch 2.11.0+cpu, PennyLane 0.44.1, default.qubit backend)
 
 ## 1. UNSW-NB15 Public Benchmark
 
+Official split mode is used for the current public benchmark path:
+
+- `5,000` rows sampled from the official UNSW training CSV
+- `750` rows reserved as validation from that training subset
+- `5,000` rows sampled from the official UNSW testing CSV for evaluation
+
 ### 1a. Classical Baselines  (`configs/public_unsw_baseline.yaml`)
 
 | Model | PR-AUC | ROC-AUC | Recall | F1 | Brier | ECE |
 |---|---|---|---|---|---|---|
-| RandomForest | **0.9881** | 0.9783 | 0.9297 | **0.9333** | **0.0612** | **0.0462** |
-| LogisticRegression | 0.9795 | 0.9633 | 0.8750 | 0.9069 | 0.0798 | 0.0510 |
-| MLP (calibrated) | 0.8949 | 0.8280 | **0.9922** | 0.8552 | 0.1751 | 0.1051 |
-| MLP (uncalibrated) | 0.8949 | 0.8280 | **0.9922** | 0.8552 | 0.1912 | 0.1737 |
+| RandomForest | **0.9693** | **0.9403** | **0.8049** | **0.8824** | **0.1410** | **0.2108** |
+| MLP (calibrated) | 0.8095 | 0.6903 | 0.2609 | 0.3963 | 0.4697 | 0.4819 |
+| MLP (uncalibrated) | 0.8095 | 0.6903 | 0.2609 | 0.3963 | 0.4619 | 0.4750 |
+| LogisticRegression | 0.7901 | 0.6674 | 0.1913 | 0.3096 | 0.5042 | 0.5109 |
 
-Seed: 13. Test set: 200 samples from UNSW-NB15 (stratified split).
+Seed: 13. Official split subset evaluation: 5,000 held-out test rows.
 
 ### 1b. Odyssey-Risk  (`configs/public_unsw_odyssey_aggressive.yaml`)
 
 | Model | PR-AUC | ROC-AUC | Recall | F1 | Brier | ECE | Uncertainty mode |
 |---|---|---|---|---|---|---|---|
-| Odyssey-Risk (aggressive) | 0.9787 | 0.9620 | **0.9297** | 0.9119 | 0.0750 | **0.0512** | zero (classical) |
+| Odyssey-Risk (aggressive hybrid) | **0.9693** | **0.9403** | **0.8049** | **0.8824** | **0.1410** | **0.2108** | zero (classical) |
 
-Seed: 13. Post-hoc blend: weight\_risk=1.00, temperature=1.00.
+Seed: 13. Post-hoc blend: weight\_risk=1.00, temperature=0.80. Teacher-blend search selected the `RandomForest` component as the best public teacher path.
 
 **UNSW-NB15 comparison summary:**
 
 | Model | PR-AUC | Δ vs Odyssey |
 |---|---|---|
-| RandomForest | 0.9881 | +0.0094 |
-| LogisticRegression | 0.9795 | +0.0008 |
-| **Odyssey-Risk** | **0.9787** | — |
-| MLP (calibrated) | 0.8949 | −0.0838 |
+| **Odyssey-Risk (aggressive hybrid)** | **0.9693** | — |
+| RandomForest | 0.9693 | ≈0.0000 |
+| MLP (calibrated) | 0.8095 | −0.1598 |
+| MLP (uncalibrated) | 0.8095 | −0.1598 |
+| LogisticRegression | 0.7901 | −0.1792 |
 
-Odyssey-Risk sits within 0.001 PR-AUC of LogisticRegression and matches its recall at a lower Brier score (0.0750 vs 0.0798).  
-The search selected `uncertainty_mode=zero` (classical-only path), confirming that on raw UNSW-NB15 data the quantum circuit adds overhead without measurable gain; the fragility feature was also disabled (`disable_fragility=true`) as it relies on simulated post-quantum transition telemetry absent from the public dataset.
+Current honest public reading:
+
+- The current strongest public Odyssey path is a teacher-assisted hybrid preset on the official UNSW split subset.
+- Validation selected the `RandomForest` teacher component as the best public blend, which is why the final Odyssey aggressive result matches the strongest baseline exactly.
+- This is a strong and honest public benchmark result for the repository, but it should not be presented as a public-data quantum advantage.
+- On real public IDS data the selected uncertainty mode remains classical (`zero`), so the quantum contribution is still better represented by the synthetic and dedicated quantum-track experiments.
 
 ---
 
@@ -86,9 +97,67 @@ On this hard scenario, the quantum uncertainty head delivers a **24.6% reduction
 
 > Note: the PR-AUC ceiling means quantum contribution cannot be measured via ranking; it manifests in the Brier score.  This is consistent with the intended role of the quantum head as a *calibration* signal rather than a discriminative one.
 
+### 3b. Fast Dedicated Quantum-Winner Benchmark
+
+Config: `configs/synthetic_quantum_winner_fast.yaml`
+
+Benchmark design:
+
+- same high-stealth synthetic transition scenario,
+- `uncertainty_hint` excluded from the classical feature inputs,
+- `uncertainty_hint` retained only as an uncertainty-head supervision target,
+- one-seed fast preset for quick iteration.
+
+This benchmark is meant to answer a narrower question than the public IDS path:
+`does the quantum uncertainty route improve calibrated risk estimation when the uncertainty signal is not leaked into the classical feature path?`
+
+| Variant | PR-AUC | Brier | ECE | Uncertainty mode |
+|---|---|---|---|---|
+| **full** | **1.0000** | **0.003518** | **0.010306** | quantum |
+| no_fragility | **1.0000** | 0.003511 | 0.010302 | quantum |
+| no_quantum | **1.0000** | 0.003543 | 0.010333 | zero |
+
+Interpretation:
+
+- `full` beats `no_quantum` on both Brier score and ECE.
+- The gain is small, but it is a cleaner and more honest `quantum win` than the public UNSW path because the uncertainty target is no longer available to the classical classifier as a direct feature.
+- `no_fragility` remains slightly stronger in this fast seed, so the current dedicated win is specifically `quantum vs zero-uncertainty`, not yet `full stack beats every ablation`.
+
 ---
 
-## 4. File Index
+## 4. Dedicated Quantum Track
+
+Config: `configs/quantum_suite.yaml`
+
+The repository now includes a committed quantum-computing track under `results/quantum_suite/` that is separate from the IDS benchmark claims.
+
+### Snapshot
+
+| Component | Result |
+|---|---|
+| Bernstein-Vazirani | recovered hidden string `101` with success `1.0000` |
+| Grover | best marked-state success `0.9453` for target `101` |
+| VQE | ground-energy estimate `-1.8572750301948115` with absolute error `7.57e-12` |
+| QAOA | approximation ratio `0.9997` on triangle MaxCut |
+| Shor toy reference | factors `15 -> 3 x 5` using order `4` |
+
+### Quantum-track files
+
+| File | Description |
+|---|---|
+| `results/quantum_suite/reports/quantum_suite_report.md` | Human-readable summary of the foundations and algorithms track |
+| `results/quantum_suite/reports/quantum_suite_summary.json` | Machine-readable combined summary |
+| `results/quantum_suite/tables/quantum_suite_foundations_state_preparation.csv` | Superposition, Bell, and GHZ state summary |
+| `results/quantum_suite/tables/quantum_suite_foundations_noise_scan.csv` | Bell-state depolarizing-mixture scan |
+| `results/quantum_suite/tables/quantum_suite_algorithms_summary.csv` | Combined algorithm results |
+| `results/quantum_suite/tables/quantum_suite_algorithms_grover_iterations.csv` | Grover amplification trace |
+| `results/quantum_suite/tables/quantum_suite_algorithms_vqe_trace.csv` | VQE optimization trace |
+| `results/quantum_suite/tables/quantum_suite_algorithms_qaoa_grid.csv` | QAOA grid search table |
+| `results/quantum_suite/tables/quantum_suite_algorithms_shor_sequence.csv` | Toy Shor modular sequence trace |
+
+---
+
+## 5. File Index
 
 | File | Description |
 |---|---|

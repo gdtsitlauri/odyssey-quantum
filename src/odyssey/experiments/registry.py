@@ -79,12 +79,23 @@ def _run_torch_model_once(config: dict[str, Any]) -> dict[str, Any]:
     model_name = str(config["model"]["name"]).lower()
     notes = ""
     blend = result.metadata.get("posthoc_blend")
+    teacher_ensemble = result.metadata.get("teacher_ensemble")
     if blend is not None:
         notes = (
             f"blend_weight_risk={float(blend['weight_risk']):.2f},"
             f"temperature={float(blend['temperature']):.2f},"
+            f"uncertainty_gain={float(blend.get('uncertainty_gain', 0.0)):.2f},"
+            f"uncertainty_temp_gain={float(blend.get('uncertainty_temperature_gain', 0.0)):.2f},"
             f"val_pr_auc={float(blend['val_pr_auc']):.4f}"
         )
+    if teacher_ensemble is not None:
+        ensemble_note = (
+            f"teacher_members={','.join(teacher_ensemble['members'])},"
+            f"teacher_components={','.join(teacher_ensemble['components'])},"
+            f"teacher_weights={','.join(f'{key}:{value:.2f}' for key, value in teacher_ensemble['component_weights'].items())},"
+            f"teacher_val_pr_auc={float(teacher_ensemble['val_pr_auc']):.4f}"
+        )
+        notes = f"{notes};{ensemble_note}" if notes else ensemble_note
     record = {
         "model_name": model_name,
         "seed": int(config["seed"]),

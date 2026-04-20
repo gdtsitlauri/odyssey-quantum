@@ -55,6 +55,11 @@ class OdysseyRiskModel(nn.Module):
             require_quantum=bool(model_cfg.get("require_quantum", False)),
             quantum_cfg=quantum_cfg,
         )
+        self.uncertainty_gate_net = nn.Sequential(
+            nn.Linear(3, 8),
+            nn.Tanh(),
+            nn.Linear(8, 1),
+        )
         combiner = model_cfg.get("combiner_init", {})
         self.alpha_raw = nn.Parameter(torch.tensor(float(combiner.get("alpha", 1.0))).log())
         self.beta_raw = nn.Parameter(torch.tensor(float(combiner.get("beta", 0.55))).log())
@@ -132,10 +137,13 @@ class OdysseyRiskModel(nn.Module):
             fragility_score = torch.full_like(uncertainty, float(self.fragility_mean.item()))
         standardized_u = ((uncertainty - self.uncertainty_mean) / self.uncertainty_std).clamp(-3.0, 3.0)
         standardized_frag = ((fragility_score - self.fragility_mean) / self.fragility_std).clamp(-3.0, 3.0)
-        interaction = attack_prob * uncertainty
-        uncertainty_modulation = standardized_u * attack_prob
-        fragility_modulation = standardized_frag * attack_prob
         attack_logit_clamped = torch.logit(attack_prob.clamp(1e-4, 1.0 - 1e-4))
+        attack_focus = attack_prob.square()
+        gate_inputs = torch.stack([attack_prob, standardized_u, standardized_frag], dim=1)
+        uncertainty_gate = torch.sigmoid(self.uncertainty_gate_net(gate_inputs)).squeeze(-1)
+        uncertainty_modulation = standardized_u * attack_focus * (0.5 + uncertainty_gate)
+        fragility_modulation = standardized_frag * attack_focus * (0.5 + 0.5 * uncertainty_gate)
+        interaction = attack_focus * torch.relu(standardized_u) * torch.relu(standardized_frag) * (0.5 + uncertainty_gate)
         risk_logit = (
             self._positive(self.alpha_raw) * attack_logit_clamped
             + self._positive(self.beta_raw) * uncertainty_modulation
@@ -150,6 +158,7 @@ class OdysseyRiskModel(nn.Module):
             "attack_prob": attack_prob,
             "uncertainty_score": uncertainty,
             "fragility_score": fragility_score,
+            "uncertainty_gate": uncertainty_gate,
             "uncertainty_modulation": uncertainty_modulation,
             "fragility_modulation": fragility_modulation,
             "interaction_term": interaction,

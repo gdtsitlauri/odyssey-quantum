@@ -1,0 +1,133 @@
+{
+  "algorithms": [
+    {
+      "algorithm": "deutsch_jozsa",
+      "all_zero_probability": 1.0,
+      "correct": true,
+      "dominant_measurement": "00",
+      "oracle": "constant",
+      "predicted_class": "constant"
+    },
+    {
+      "algorithm": "deutsch_jozsa",
+      "all_zero_probability": 3.688644553740056e-70,
+      "correct": true,
+      "dominant_measurement": "11",
+      "oracle": "balanced",
+      "predicted_class": "balanced"
+    },
+    {
+      "algorithm": "bernstein_vazirani",
+      "correct": true,
+      "hidden_string": "101",
+      "recovered_string": "101",
+      "success_probability": 1.0
+    },
+    {
+      "algorithm": "grover",
+      "best_measurement": "101",
+      "best_success_probability": 0.9453124999999999,
+      "correct": true,
+      "marked_state": "101",
+      "n_qubits": 3,
+      "recommended_iterations": 2
+    },
+    {
+      "absolute_error": 7.568390358869692e-12,
+      "algorithm": "vqe",
+      "converged": true,
+      "exact_ground_energy": -1.85727503020238,
+      "ground_energy_estimate": -1.8572750301948115,
+      "iterations": 3,
+      "runtime_seconds": 0.22228339999992386
+    },
+    {
+      "algorithm": "qaoa",
+      "approximation_ratio": 0.9996674025585592,
+      "best_beta": 0.3141592653589793,
+      "best_expected_cut": 1.9993348051171185,
+      "best_gamma": 0.6283185307179586,
+      "dominant_measurement": "001",
+      "graph": "triangle_maxcut"
+    },
+    {
+      "algorithm": "shor_toy_reference",
+      "base": 2,
+      "composite": 15,
+      "factor_left": 3,
+      "factor_right": 5,
+      "half_power_mod_n": 4,
+      "note": "Arithmetic/order-finding walk-through, not a full fault-tolerant Shor circuit.",
+      "order": 4,
+      "successful_factorization": true
+    }
+  ],
+  "backend_status": {
+    "pennylane_available": true,
+    "pennylane_qiskit_available": true,
+    "preferred_backend": "pennylane+qiskit.aer",
+    "qiskit_aer_available": true,
+    "qiskit_available": true
+  },
+  "noise_scan": [
+    {
+      "bell_fidelity": 1.0,
+      "depolarizing_mixture": 0.0,
+      "entropy_bits": 1.0,
+      "prob_00": 0.5,
+      "prob_11": 0.5
+    },
+    {
+      "bell_fidelity": 0.975,
+      "depolarizing_mixture": 0.05,
+      "entropy_bits": 1.1686609314966703,
+      "prob_00": 0.4875,
+      "prob_11": 0.4875
+    },
+    {
+      "bell_fidelity": 0.9500000000000001,
+      "depolarizing_mixture": 0.1,
+      "entropy_bits": 1.2863969571159561,
+      "prob_00": 0.47500000000000003,
+      "prob_11": 0.47500000000000003
+    },
+    {
+      "bell_fidelity": 0.8999999999999999,
+      "depolarizing_mixture": 0.2,
+      "entropy_bits": 1.4689955935892813,
+      "prob_00": 0.45,
+      "prob_11": 0.45
+    },
+    {
+      "bell_fidelity": 0.825,
+      "depolarizing_mixture": 0.35,
+      "entropy_bits": 1.6690158350565576,
+      "prob_00": 0.4125,
+      "prob_11": 0.4125
+    }
+  ],
+  "state_preparation": [
+    {
+      "entropy_bits": 1.0,
+      "experiment": "single_qubit_superposition",
+      "support_size": 2,
+      "top_probability": 0.5,
+      "top_state": "0"
+    },
+    {
+      "entropy_bits": 1.0,
+      "experiment": "bell_state",
+      "support_size": 2,
+      "top_probability": 0.5,
+      "top_state": "00"
+    },
+    {
+      "entropy_bits": 1.0,
+      "experiment": "ghz_3q",
+      "support_size": 2,
+      "top_probability": 0.5,
+      "top_state": "000"
+    }
+  ],
+  "suite": "quantum_suite"
+}

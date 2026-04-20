@@ -9,10 +9,13 @@ data:
   public:
     dataset: unsw_nb15
     root: data/raw/unsw_nb15
-    max_rows: 1000
+    max_rows: 5000
+    use_official_split: true
 model:
   name: odyssey_risk
   require_quantum: false
+  quantum_enabled: false
+  uncertainty_mode: zero
   encoder_hidden_dim: 48
   encoder_latent_dim: 16
   combiner_init:
@@ -21,8 +24,8 @@ model:
     gamma: 0.1
     delta: 0.15
 training:
-  epochs: 3
-  batch_size: 64
+  epochs: 5
+  batch_size: 128
   patience: 2
 search:
   enabled: false

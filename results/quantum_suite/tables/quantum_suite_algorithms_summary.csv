@@ -1,0 +1,8 @@
+algorithm,oracle,predicted_class,correct,all_zero_probability,dominant_measurement,hidden_string,recovered_string,success_probability,n_qubits,marked_state,recommended_iterations,best_success_probability,best_measurement,ground_energy_estimate,exact_ground_energy,absolute_error,iterations,runtime_seconds,converged,graph,best_expected_cut,approximation_ratio,best_gamma,best_beta,composite,base,order,half_power_mod_n,factor_left,factor_right,successful_factorization,note
+deutsch_jozsa,constant,constant,True,1.0,00,,,,,,,,,,,,,,,,,,,,,,,,,,,
+deutsch_jozsa,balanced,balanced,True,3.688644553740056e-70,11,,,,,,,,,,,,,,,,,,,,,,,,,,,
+bernstein_vazirani,,,True,,,101,101,1.0,,,,,,,,,,,,,,,,,,,,,,,,
+grover,,,True,,,,,,3.0,101,2.0,0.9453124999999999,101,,,,,,,,,,,,,,,,,,,
+vqe,,,,,,,,,,,,,,-1.8572750301948115,-1.85727503020238,7.568390358869692e-12,3.0,0.22228339999992386,True,,,,,,,,,,,,,
+qaoa,,,,,001,,,,,,,,,,,,,,,triangle_maxcut,1.9993348051171185,0.9996674025585592,0.6283185307179586,0.3141592653589793,,,,,,,,
+shor_toy_reference,,,,,,,,,,,,,,,,,,,,,,,,,15.0,2.0,4.0,4.0,3.0,5.0,True,"Arithmetic/order-finding walk-through, not a full fault-tolerant Shor circuit."

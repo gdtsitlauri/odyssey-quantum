@@ -44,7 +44,7 @@ pytest -q
 
 ## Final Assessment
 
-See [final_assessment.md](/c:/Users/TOM/Desktop/QQ/outputs/reports/final_assessment.md) for the current evidence-based conclusion after the leakage fix and the completed public, ablation, and seed-stability runs.
+See [final_assessment.md](../outputs/reports/final_assessment.md) for the current evidence-based conclusion after the leakage fix and the completed public, ablation, and seed-stability runs.
 
 ## Exact Preset Commands
 
@@ -69,9 +69,9 @@ odyssey run-odyssey --config configs/seed_stability_suite.yaml
 - If they are unavailable and quantum is not required, Odyssey falls back to a deterministic classical uncertainty surrogate and records the fallback in run metadata.
 - If `require_quantum: true`, the run fails with an explicit dependency error.
 
-## Current Best Public Preset
+## Current Best Standalone Odyssey Preset
 
-For the current repository state, the strongest Odyssey public result is the aggressive preset:
+For the current repository state, the strongest standalone Odyssey result is the aggressive preset:
 
 ```powershell
 odyssey run-odyssey --config configs/public_unsw_odyssey_aggressive.yaml
@@ -87,5 +87,5 @@ If you want the strongest last benchmark-oriented run currently implemented:
 odyssey run-baselines --config configs/public_unsw_odyssey_ensemble.yaml
 ```
 
-This trains a validation-stacked ensemble over `LogisticRegression`, `RandomForest`, and `Odyssey-Risk`. It is the strongest honest extra step for score chasing on the current public benchmark, but in the present run it still lands just below `RandomForest` on PR-AUC.
+This trains a validation-stacked ensemble over `LogisticRegression`, `RandomForest`, and `Odyssey-Risk`. It is the strongest Odyssey-family public benchmark path currently implemented: it beats standalone Odyssey and LogisticRegression on PR-AUC, but in the present run it still lands just below `RandomForest`.
 

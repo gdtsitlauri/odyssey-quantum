@@ -14,6 +14,12 @@ def test_parser_accepts_run_odyssey() -> None:
     assert args.command == "run-odyssey"
 
 
+def test_parser_accepts_quantum_suite() -> None:
+    parser = build_parser()
+    args = parser.parse_args(["quantum-suite", "--config", "configs/quantum_suite.yaml"])
+    assert args.command == "quantum-suite"
+
+
 def test_cli_odyssey_smoke_run() -> None:
     workspace_root = Path("outputs/pytest_smoke_workspace")
     workspace_root.mkdir(parents=True, exist_ok=True)
@@ -37,5 +43,27 @@ def test_cli_odyssey_smoke_run() -> None:
 
     assert (workspace_root / "tables" / "pytest_smoke_metrics.csv").exists()
     assert (workspace_root / "reports" / "pytest_smoke_report.md").exists()
+    assert any((workspace_root / "figures").glob("*.png"))
+
+
+def test_cli_quantum_suite_smoke_run() -> None:
+    workspace_root = Path("outputs/pytest_quantum_workspace")
+    config = load_config("configs/quantum_suite.yaml")
+    config["experiment_name"] = "pytest_quantum"
+    config["output_dir"] = str(workspace_root)
+    config["quantum"]["foundations"]["noise_levels"] = [0.0, 0.1]
+    config["quantum"]["algorithms"]["qaoa"]["gamma_steps"] = 7
+    config["quantum"]["algorithms"]["qaoa"]["beta_steps"] = 7
+    config["quantum"]["algorithms"]["vqe"]["maxiter"] = 25
+    config_path = workspace_root / "quantum.yaml"
+    workspace_root.mkdir(parents=True, exist_ok=True)
+    with config_path.open("w", encoding="utf-8") as handle:
+        yaml.safe_dump(config, handle, sort_keys=False)
+
+    main(["quantum-suite", "--config", str(config_path)])
+
+    assert (workspace_root / "tables" / "pytest_quantum_foundations_noise_scan.csv").exists()
+    assert (workspace_root / "tables" / "pytest_quantum_algorithms_summary.csv").exists()
+    assert (workspace_root / "reports" / "pytest_quantum_report.md").exists()
     assert any((workspace_root / "figures").glob("*.png"))
 

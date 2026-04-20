@@ -23,6 +23,7 @@ class DatasetBundle:
     augmented_columns: list[str] = field(default_factory=list)
     excluded_feature_columns: list[str] = field(default_factory=list)
     manifest: dict[str, Any] = field(default_factory=dict)
+    predefined_splits: dict[str, pd.DataFrame] | None = None
 
 
 @dataclass
@@ -34,6 +35,7 @@ class SplitArrays:
     frame: pd.DataFrame
     feature_names: list[str]
     fragility: np.ndarray
+    uncertainty_targets: np.ndarray
     sequence_ids: np.ndarray
     timestamps: np.ndarray
     sequence_X: np.ndarray | None = None

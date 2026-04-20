@@ -34,7 +34,11 @@ Place the official CSV files in that directory, or directly under `data/raw/`. T
 - `UNSW_NB15_training-set.csv`
 - `UNSW_NB15_testing-set.csv`
 
-If those files exist, they are used first because they include stable headers. The larger `UNSW-NB15_1.csv` ... `UNSW-NB15_4.csv` files are ignored unless they can be validated as headered inputs. Schema mapping is conservative and only uses columns that are present. If timestamp-like fields are absent, the pipeline falls back to stratified random splitting.
+If those files exist, they are used first because they include stable headers. The larger `UNSW-NB15_1.csv` ... `UNSW-NB15_4.csv` files are ignored unless they can be validated as headered inputs. Schema mapping is conservative and only uses columns that are present.
+
+With `use_official_split: true`, Odyssey now keeps the official train/test separation intact and only carves validation rows from the official training CSV. This is the recommended public benchmark mode.
+
+If timestamp-like fields are absent, the pipeline falls back to stratified random splitting.
 
 Public IDS datasets do not expose post-quantum transition fields. Odyssey augments such data with transparent synthetic fragility metadata derived from observed transport and service attributes. These augmented fields are assumptions for research, not measured ground truth.
 

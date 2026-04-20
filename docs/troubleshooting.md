@@ -21,7 +21,7 @@ If you want to proceed without them, ensure the config sets `model.require_quant
 
 ## No public dataset found
 
-Place UNSW-NB15 CSV files under `data/raw/unsw_nb15/`. See [data/README.md](/c:/Users/TOM/Desktop/QQ/data/README.md).
+Place UNSW-NB15 CSV files under `data/raw/unsw_nb15/`. See [data/README.md](../data/README.md).
 
 ## Windows path issues
 

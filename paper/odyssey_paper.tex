@@ -1,0 +1,146 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{url}
+
+\title{Odyssey: Quantum-Resilient Risk-Aware Intrusion Detection with a Dedicated Quantum Computing Track}
+
+\author{\IEEEauthorblockN{George David Tsitlauri}
+\IEEEauthorblockA{\textit{Dept. of Informatics \& Telecommunications}\\
+\textit{University of Thessaly, Greece}\\
+gdtsitlauri@gmail.com}}
+\date{2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Odyssey is a dual-contribution research repository. The primary contribution is a hybrid classical-quantum intrusion detection system (IDS) designed for post-quantum cryptographic transition environments, combining a classical encoder, a quantum uncertainty head, a fragility scorer, and a temporal combiner. The secondary contribution is a standalone quantum computing track implementing: single-qubit and multi-qubit circuit foundations (superposition, Bell states, GHZ states, depolarizing noise), oracle-style algorithms (Deutsch-Jozsa, Bernstein-Vazirani), search and optimization (Grover's algorithm, QAOA on MaxCut, VQE on a molecular Hamiltonian), and a toy order-finding Shor walkthrough for $N=15$. All components run on a pure-NumPy statevector simulator with no external quantum hardware required.
+\end{abstract}
+
+\section{Introduction}
+
+By 2026, defenders face mixed cryptographic environments where legacy key exchange, transitional post-quantum deployments, and long-horizon data exposure all interact. Odyssey investigates whether intrusion detection can improve rare-attack sensitivity and calibration by fusing classical and quantum computational signals.
+
+Beyond the applied IDS contribution, Odyssey includes a self-contained quantum computing educational track covering the circuit design and algorithm families central to the field of quantum computer design~\cite{nielsen2010quantum}.
+
+\section{Quantum Computing Track}
+
+\subsection{Statevector Simulator}
+
+All quantum experiments run on a pure NumPy statevector simulator. The state of an $n$-qubit system is a $2^n$-dimensional complex vector. Single-qubit gates are embedded into $n$-qubit space via Kronecker products. Two-qubit operations (CNOT, CZ) are constructed directly. The simulator supports:
+
+\begin{itemize}
+  \item Arbitrary single-qubit gates ($H$, $X$, $Y$, $Z$, $R_x(\theta)$, $R_y(\theta)$, $R_z(\theta)$)
+  \item CNOT and CZ two-qubit gates
+  \item Marginal and joint measurement probabilities
+  \item Shannon entropy and classical fidelity metrics
+  \item Depolarizing noise via uniform distribution mixing
+\end{itemize}
+
+\subsection{Circuit Foundations}
+
+\paragraph{Superposition.} A single Hadamard gate applied to $|0\rangle$ prepares the uniform superposition $\frac{1}{\sqrt{2}}(|0\rangle + |1\rangle)$, verified by measuring entropy $H = 1.0$ bit.
+
+\paragraph{Bell Entanglement.} The Bell state $|\Phi^+\rangle = \frac{1}{\sqrt{2}}(|00\rangle + |11\rangle)$ is prepared via $H \otimes I$ followed by CNOT. Parity correlation $P(\text{same}) = 1.0$ confirms maximal entanglement. Marginal entropy of each qubit equals 1.0 bit.
+
+\paragraph{GHZ States.} The $n$-qubit GHZ state $\frac{1}{\sqrt{2}}(|0\rangle^{\otimes n} + |1\rangle^{\otimes n})$ is prepared for configurable $n$, demonstrating scalable entanglement generation.
+
+\paragraph{Noise Characterization.} A depolarizing noise scan mixes the Bell state toward uniform at varying rates, tracking fidelity degradation and entropy growth.
+
+\subsection{Quantum Algorithms}
+
+\subsubsection{Deutsch-Jozsa}
+
+The Deutsch-Jozsa algorithm determines whether a Boolean oracle $f:\{0,1\}^n \to \{0,1\}$ is constant or balanced using a single query, versus the $\Omega(2^{n-1}+1)$ classical worst-case. The implementation uses the phase-kickback circuit with the ancilla qubit initialized to $|{-}\rangle = H|1\rangle$. Verified on both constant ($f \equiv 0$) and balanced (parity) oracles.
+
+\subsubsection{Bernstein-Vazirani}
+
+Given a hidden string $s \in \{0,1\}^n$, the Bernstein-Vazirani algorithm recovers $s$ exactly in one query using the inner-product oracle $f(x) = s \cdot x \pmod{2}$. Classically this requires $n$ queries. Demonstrated for configurable hidden strings; $P(\text{correct}) = 1.0$.
+
+\subsubsection{Grover's Search}
+
+Grover's algorithm amplifies the amplitude of a marked element in an unstructured database of size $N = 2^n$ using $O(\sqrt{N})$ iterations. The implementation constructs:
+\begin{align}
+U_f &= I - 2|w\rangle\langle w| \quad \text{(phase oracle)} \\
+D &= 2|\psi\rangle\langle\psi| - I \quad \text{(diffusion operator)}
+\end{align}
+and applies $\lfloor\frac{\pi}{4}\sqrt{N}\rfloor$ iterations. Benchmarked on 3-qubit ($N=8$) and larger systems with success probability tracked per iteration.
+
+\subsubsection{Variational Quantum Eigensolver (VQE)}
+
+VQE minimizes the expectation value $\langle\psi(\theta)|H|\psi(\theta)\rangle$ of a 2-qubit molecular Hamiltonian (H$_2$-style) using a 6-parameter ansatz with $R_y$ and $R_x$ rotations and CNOT entanglers. The classical optimizer (Powell) drives convergence. Ground energy error $|\epsilon - \epsilon_\text{exact}| < 10^{-4}$ Hartree.
+
+\subsubsection{QAOA for MaxCut}
+
+The Quantum Approximate Optimization Algorithm (QAOA) is applied to the triangle MaxCut problem. A single-layer QAOA circuit alternates cost-unitary $e^{-i\gamma C}$ and mixer $e^{-i\beta B}$ operators. A $(\gamma, \beta)$ grid search identifies the optimal parameters. The triangle graph ($K_3$) has optimal cut = 2; QAOA achieves approximation ratio $\geq 0.75$.
+
+\subsubsection{Shor's Order-Finding (Toy Reference)}
+
+A classical arithmetic walkthrough demonstrates the order-finding subroutine central to Shor's algorithm for $N=15$, base $a=2$: computing $\text{ord}(a, N) = 4$, then $\gcd(a^{r/2} \pm 1, N)$ to recover factors $\{3, 5\}$. This is annotated as a pedagogical reference, not a full fault-tolerant circuit implementation.
+
+\section{Applied IDS: Odyssey-Risk}
+
+\subsection{Architecture}
+
+The Odyssey-Risk model fuses four signals:
+
+\begin{enumerate}
+  \item \textbf{Classical encoder}: a 3-layer MLP maps event windows to a latent bottleneck.
+  \item \textbf{Attack head}: binary attack likelihood from the encoder output.
+  \item \textbf{Quantum uncertainty head}: a variational quantum circuit maps the latent vector to a calibrated uncertainty score.
+  \item \textbf{Fragility scorer}: a rule-based post-quantum transition exposure score.
+\end{enumerate}
+
+These are combined by a learned risk combiner with tunable $(\alpha, \beta, \gamma, \delta)$ weights.
+
+\subsection{Benchmark Results}
+
+Evaluated on the public UNSW-NB15 dataset (5000 samples, official train/test split). Table~\ref{tab:results} reports the ensemble configuration.
+
+\begin{table}[h]
+\centering
+\caption{UNSW-NB15 benchmark --- stacked ensemble}
+\label{tab:results}
+\begin{tabular}{lcccc}
+\toprule
+Model & Accuracy & F1 & PR-AUC & Brier \\
+\midrule
+\textbf{odyssey\_stacked\_ensemble} & \textbf{0.915} & \textbf{0.932} & \textbf{0.9876} & --- \\
+Odyssey-Risk (single) & 0.907 & 0.924 & 0.9787 & 0.071 \\
+LogisticRegression & 0.910 & 0.928 & 0.9795 & 0.094 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent\textbf{Key finding:} The quantum uncertainty head reduces Brier score by 24.6\% relative to the classical-only baseline, demonstrating improved probability calibration even when raw accuracy gains are modest.
+
+\subsection{Limitations}
+
+\begin{itemize}
+  \item Quantum head runs on a classical statevector simulator; no hardware quantum advantage is claimed.
+  \item UNSW-NB15 is an academic benchmark and may not reflect live production traffic characteristics.
+  \item Evaluation uses 1 seed; multi-seed campaigns are a natural extension.
+\end{itemize}
+
+\section{Conclusion}
+
+Odyssey demonstrates two orthogonal contributions from a single codebase: (1) a hybrid IDS with improved calibration through quantum uncertainty estimation, and (2) a complete quantum computing track covering circuit foundations through algorithmic paradigms. The quantum track covers the core curriculum of quantum computer design: universal gate sets, entanglement, oracles, amplitude amplification, variational optimization, and the arithmetic underpinning of quantum factorization.
+
+\bibliographystyle{IEEEtran}
+\bibliography{references}
+
+\begin{thebibliography}{9}
+\bibitem{nielsen2010quantum}
+M.~A. Nielsen and I.~L. Chuang,
+\textit{Quantum Computation and Quantum Information},
+Cambridge University Press, 2010.
+
+\bibitem{moro2021quantum}
+L.~Moro \textit{et al.},
+``Quantum compiling by deep reinforcement learning,''
+\textit{Commun.\ Phys.}, vol.~4, p.~178, 2021.
+\end{thebibliography}
+
+\end{document}
