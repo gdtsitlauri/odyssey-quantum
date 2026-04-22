@@ -1,15 +1,21 @@
 # Odyssey
 
-**Author:** George David Tsitlauri  
-**Affiliation:** Dept. of Informatics & Telecommunications, University of Thessaly, Greece  
-**Contact:** gdtsitlauri@gmail.com  
-**Year:** 2026
 
 Odyssey is a publication-oriented research repository for studying quantum-resilient, risk-aware intrusion detection during post-quantum cryptographic transition. The repository now combines:
 
 - a hybrid classical-quantum IDS research prototype,
 - reproducible classical baselines and ablations,
 - and a dedicated quantum-computing track covering foundations, algorithm demos, variational methods, and a toy Shor-style order-finding walk-through.
+
+
+## Project Metadata
+
+| Field | Value |
+| --- | --- |
+| Author | George David Tsitlauri |
+| Affiliation | Dept. of Informatics & Telecommunications, University of Thessaly, Greece |
+| Contact | gdtsitlauri@gmail.com |
+| Year | 2026 |
 
 ## Why This Matters
 
@@ -320,33 +326,4 @@ Current snapshot from the committed run:
 
 This repository is intended for defensive security research and reproducible scientific study. Synthetic scenarios that mimic stealth or migration fragility are included to help defenders reason about failure modes, not to support offensive deployment.
 
-## License
 
-This repository is released under the MIT License. See [LICENSE](LICENSE).
-
-## Extending the Framework
-
-- Add new public data adapters under `src/odyssey/data/`
-- Add alternative fragility heuristics under `src/odyssey/features/`
-- Add stronger temporal encoders or calibration methods under `src/odyssey/models/` and `src/odyssey/training/`
-- Add deeper quantum demos or backend integrations under `src/odyssey/quantum/`
-- Update experiment presets under `configs/`
-- Export new paper artifacts through `scripts/export_paper_assets.py`
-
-## Fastest Path To First Results
-
-1. Install the base dependencies.
-2. Run `odyssey run-all --config configs/synthetic_small.yaml`.
-3. Inspect `outputs/reports/synthetic_small_debug_all_report.md` and the figures in `outputs/figures/`.
-
-## Citation
-
-```bibtex
-@misc{tsitlauri2026odyssey,
-  author = {George David Tsitlauri},
-  title  = {Odyssey: Quantum-Resilient Risk-Aware Intrusion Detection for Post-Quantum Cryptographic Transition},
-  year   = {2026},
-  institution = {University of Thessaly},
-  email  = {gdtsitlauri@gmail.com}
-}
-```
